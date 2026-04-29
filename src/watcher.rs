@@ -16,7 +16,7 @@ impl FileWatcher {
         let watcher = RecommendedWatcher::new(
             move |res| {
                 if let Ok(event) = res {
-                    tx.send(event).unwrap();
+                    let _ = tx.send(event);
                 }
             },
             Config::default(),
@@ -42,5 +42,33 @@ impl FileWatcher {
             }
         }
         false
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use notify::event::{Event, EventKind, ModifyKind};
+    use std::path::PathBuf;
+
+    #[test]
+    fn test_is_interesting_event_pdf() {
+        let event = Event::new(EventKind::Modify(ModifyKind::Data(notify::event::DataChange::Content)))
+            .add_path(PathBuf::from("test.pdf"));
+        assert!(FileWatcher::is_interesting_event(&event));
+    }
+
+    #[test]
+    fn test_is_interesting_event_kdbx() {
+        let event = Event::new(EventKind::Create(notify::event::CreateKind::File))
+            .add_path(PathBuf::from("secret.KDBX")); // Case insensitive check
+        assert!(FileWatcher::is_interesting_event(&event));
+    }
+
+    #[test]
+    fn test_is_not_interesting_event_txt() {
+        let event = Event::new(EventKind::Modify(ModifyKind::Any))
+            .add_path(PathBuf::from("readme.txt"));
+        assert!(!FileWatcher::is_interesting_event(&event));
     }
 }
