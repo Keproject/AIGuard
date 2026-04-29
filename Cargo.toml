@@ -1,0 +1,13 @@
+[package]
+name = "aiguard-windows-core"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+notify = "8.0.0"
+sysinfo = "0.33.1"
+tray-icon = { version = "0.19.2", default-features = false }
+winit = "0.30.8"
+tokio = { version = "1.43.0", features = ["full"] }
+log = "0.4.25"
+env_logger = "0.11.6"
