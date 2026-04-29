@@ -430,12 +430,24 @@
             document.getElementById('checkout-modal').classList.add('hidden');
             document.getElementById('checkout-modal').classList.remove('flex');
         }
+        // Configurazione Stripe (Placeholder per chiavi API)
+        const STRIPE_PUBLISHABLE_KEY = 'pk_test_xxxxxxxxxxxxxxxxxxxxxxxx'; // Inserire chiave reale nei segreti del repo
+
         function processPayment() {
-            if (!document.getElementById('tos-1').checked || !document.getElementById('tos-2').checked || !document.getElementById('tos-3').checked) {
-                alert("È necessario accettare tutte le clausole legali e il marketing.");
+            const tos1 = document.getElementById('tos-1').checked;
+            const tos2 = document.getElementById('tos-2').checked;
+            const tos3 = document.getElementById('tos-3').checked;
+
+            if (!tos1 || !tos2 || !tos3) {
+                alert("ERRORE LEGALE: È obbligatorio accettare i Termini, le Clausole 1341-1342 e il consenso Marketing per procedere.");
                 return;
             }
-            alert("Protocollo Attivato. Verifica SHA256 in corso...");
+
+            console.log("Inizializzazione checkout transazionale...");
+            // Qui andrebbe l'integrazione con Stripe Checkout:
+            // stripe.redirectToCheckout({ lineItems: [{ price: 'price_id', quantity: 1 }], ... });
+
+            alert("PROTOCOLLO ATTIVATO: Transazione simulata con successo. Reindirizzamento al download di Vigile Cieco...");
             closeCheckout();
         }
 
