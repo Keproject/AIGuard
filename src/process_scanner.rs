@@ -23,15 +23,14 @@ impl ProcessScanner {
         for process in self.sys.processes().values() {
             let name = process.name().to_string_lossy().to_lowercase();
 
-            // Controlla se il nome del processo contiene onnx o torch
-            if name.contains("onnxruntime") || name.contains("torch") {
+            if Self::is_ai_related(&name) {
                 detected.push(name);
                 continue;
             }
 
             for arg in process.cmd() {
                 let arg_low = arg.to_string_lossy().to_lowercase();
-                if arg_low.contains("onnxruntime") || arg_low.contains("torch") {
+                if Self::is_ai_related(&arg_low) {
                     detected.push(process.name().to_string_lossy().to_string());
                     break;
                 }
@@ -41,5 +40,29 @@ impl ProcessScanner {
         detected.sort();
         detected.dedup();
         detected
+    }
+
+    /// Funzione interna per determinare se una stringa è legata all'IA.
+    fn is_ai_related(s: &str) -> bool {
+        let low = s.to_lowercase();
+        low.contains("onnxruntime") || low.contains("torch")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_is_ai_related_positive() {
+        assert!(ProcessScanner::is_ai_related("libonnxruntime.so"));
+        assert!(ProcessScanner::is_ai_related("python_torch_executor"));
+        assert!(ProcessScanner::is_ai_related("TORCH_MODEL_SERVER"));
+    }
+
+    #[test]
+    fn test_is_ai_related_negative() {
+        assert!(!ProcessScanner::is_ai_related("chrome.exe"));
+        assert!(!ProcessScanner::is_ai_related("system_idle_process"));
     }
 }
