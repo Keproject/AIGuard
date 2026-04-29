@@ -339,8 +339,8 @@
                 <div class="bg-slate-800 p-3 rounded-2xl border border-white/5">Benvenuto nel Protocollo Blind-Shield. Come posso assisterti oggi?</div>
             </div>
             <div class="flex space-x-2">
-                <input type="text" id="chat-input" class="bg-slate-800 border border-white/10 rounded-xl p-3 flex-grow text-xs focus:outline-none focus:border-sky-500 transition" placeholder="Chiedi sull'EU AI Act...">
-                <button onclick="sendChat()" class="bg-sky-600 hover:bg-sky-500 p-3 rounded-xl transition">
+                <input type="text" id="chat-input" onkeypress="if(event.key === 'Enter') sendChat()" class="bg-slate-800 border border-white/10 rounded-xl p-3 flex-grow text-xs focus:outline-none focus:border-sky-500 transition" placeholder="Chiedi sull'EU AI Act...">
+                <button id="send-chat-btn" onclick="sendChat()" class="bg-sky-600 hover:bg-sky-500 p-3 rounded-xl transition">
                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
             </div>
@@ -413,17 +413,70 @@
             input.value = '';
 
             setTimeout(() => {
-                let response = "Il Protocollo Blind-Shield opera a livello kernel-user per garantire che la tua identità rimanga privata.";
-                if (text.toLowerCase().includes("costo") || text.toLowerCase().includes("prezzo")) {
-                    response = "Il costo dell'offerta Early Bird è di soli €1,90 al mese.";
-                } else if (text.toLowerCase().includes("legale") || text.toLowerCase().includes("cap")) {
-                    response = "Operiamo con un Liability Cap di €50,00 e giurisdizione a Pordenone.";
-                } else if (text.toLowerCase().includes("rust")) {
-                    response = "L'uso di Rust ci permette di garantire una reattività sub-10ms, essenziale per la sicurezza deterministica.";
-                }
+                let response = getVigileCiecoResponse(text.toLowerCase());
                 chatMessages.innerHTML += `<div class="bg-slate-800 p-3 rounded-2xl border border-white/5 mr-8">${response}</div>`;
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }, 500);
+        }
+
+        // Chat Knowledge Base (Vigile Cieco)
+        const chatKB = {
+            "latenza": "<10ms (grazie a Rust).",
+            "python": "No, troppo lento per il nostro protocollo.",
+            "mac": "Al momento Windows. Mac è in pipeline.",
+            "monitoraggio": "Tracciamo i flussi dati verso le IA in tempo reale.",
+            "installazione": "Un solo file .exe leggero e portatile.",
+            "firewall": "Non serve, operiamo a livello più profondo.",
+            "crash": "Sistema isolato, non influisce sulla stabilità di Windows.",
+            "icona rossa": "Indica un leak rilevato. Fermati e isola il file.",
+            "offline": "Funzioniamo al 100% in locale. Zero cloud.",
+            "update": "Aggiornamenti continui via GitHub repository.",
+            "leggete": "No, analizziamo solo i pattern, non leggiamo i tuoi segreti.",
+            "log": "Mai inviati al server. Restano nel tuo PC.",
+            "gdpr": "Piena conformità grazie al protocollo Local-First.",
+            "ciechi": "Sentiamo il rischio attraverso l'analisi entropica, ma non vediamo i tuoi dati.",
+            "cancella": "Sì, i log locali sono cancellabili con un click.",
+            "addestrate": "Assolutamente no. Vi proteggiamo proprio da questo.",
+            "policy": "Ti avvisiamo se cambiano le policy di ingestione delle IA note.",
+            "whitelist": "Sì, puoi configurare applicazioni fidate.",
+            "backdoor": "No, il codice è pulito e verificabile.",
+            "certificazione": "Blind-Shield prova che il tuo lavoro è umano e non generato.",
+            "smascherate": "Sì, rileviamo testi IA tramite analisi entropica.",
+            "prove": "Tracciamo la digitazione umana vs incolla massivo.",
+            "infallibile": "99% di efficacia sui modelli LLM attuali.",
+            "logo": "Puoi esporre il brand Blind-Shield se la licenza è attiva.",
+            "immagini": "Monitoriamo testo e codice sorgente per ora.",
+            "forensics": "Essenziale per proteggere il copyright e l'originalità del brand.",
+            "traduzioni": "Rileviamo se una traduzione è neurale o umana.",
+            "aziende": "Ideale per audit sull'uso delle IA da parte dei dipendenti.",
+            "pdf": "Generiamo report PDF firmati digitalmente.",
+            "prezzo": "1,90€/mese per i primi 5.000 utenti (Blitzscaling).",
+            "costo": "1,90€/mese. Il prezzo salirà dopo il lancio ufficiale.",
+            "abbonamento": "Sì, flessibile. Puoi disdire quando vuoi.",
+            "bonifico": "No, solo Stripe per attivazione istantanea.",
+            "sconti": "Sì, per licenze multiple oltre le 10 unità.",
+            "prova": "Puoi testare il widget Exposure qui sopra gratuitamente.",
+            "ottengo": "Protezione deterministica e modulo Forensics completo.",
+            "pc": "La licenza è legata al tuo account utente.",
+            "regalo": "Sì, puoi acquistare codici licenza per terzi.",
+            "chi siete": "Siamo KEPROJECT S.R.L., esperti in cybersecurity.",
+            "garanzia": "Offriamo monitoraggio preventivo deterministico.",
+            "responsabilità": "Limitata a 50€ per darti tecnologia d'élite a soli 1,90€.",
+            "dati": "La responsabilità dei dati resta sempre dell'utente.",
+            "tos": "Trasparenti, brevi e protettivi.",
+            "foro": "Il foro competente è Pordenone (PN).",
+            "assicurazione": "Coperta dalle riserve interne di KEPROJECT.",
+            "illegali": "Usi illegali vietati, pena la revoca della licenza.",
+            "bug": "Fix costanti in pipeline continua.",
+            "standard": "Seguiamo lo Standard Local-First 2026.",
+            "umani": "Offriamo supporto umano via ticket per casi complessi."
+        };
+
+        function getVigileCiecoResponse(query) {
+            for (let key in chatKB) {
+                if (query.includes(key)) return chatKB[key];
+            }
+            return "Sono il Vigile Cieco. Sono rapido, serio e protettivo. Chiedimi di latenza, privacy o del protocollo Blind-Shield.";
         }
 
         function openCheckout(plan) {
