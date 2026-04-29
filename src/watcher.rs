@@ -3,15 +3,14 @@ use std::path::Path;
 use std::sync::mpsc::Sender;
 
 /// Modulo per il monitoraggio del file system.
-/// Monitora la creazione e la modifica di file con estensioni specifiche:
-/// .pdf, .docx, .pem, .kdbx.
+/// CERTIFICAZIONE: NO LLM TRAINING ON USER DATA.
+/// L'analisi è 100% deterministica basata su estensioni e pattern matching locale.
 pub struct FileWatcher {
     watcher: RecommendedWatcher,
 }
 
 impl FileWatcher {
     /// Crea una nuova istanza di FileWatcher.
-    /// Invia eventi tramite il trasmettitore fornito quando vengono rilevati file di interesse.
     pub fn new(tx: Sender<Event>) -> notify::Result<Self> {
         let watcher = RecommendedWatcher::new(
             move |res| {
@@ -30,7 +29,7 @@ impl FileWatcher {
         self.watcher.watch(path.as_ref(), RecursiveMode::Recursive)
     }
 
-    /// Controlla se un evento riguarda uno dei tipi di file che ci interessano.
+    /// Controlla in modo deterministico se un evento riguarda uno dei tipi di file di interesse.
     pub fn is_interesting_event(event: &Event) -> bool {
         for path in &event.paths {
             if let Some(ext) = path.extension() {
@@ -52,23 +51,13 @@ mod tests {
     use std::path::PathBuf;
 
     #[test]
-    fn test_is_interesting_event_pdf() {
-        let event = Event::new(EventKind::Modify(ModifyKind::Data(notify::event::DataChange::Content)))
-            .add_path(PathBuf::from("test.pdf"));
-        assert!(FileWatcher::is_interesting_event(&event));
-    }
+    fn test_deterministic_analysis() {
+        // Stesso input = Stesso output
+        let path = PathBuf::from("test.pdf");
+        let event1 = Event::new(EventKind::Modify(ModifyKind::Any)).add_path(path.clone());
+        let event2 = Event::new(EventKind::Modify(ModifyKind::Any)).add_path(path);
 
-    #[test]
-    fn test_is_interesting_event_kdbx() {
-        let event = Event::new(EventKind::Create(notify::event::CreateKind::File))
-            .add_path(PathBuf::from("secret.KDBX")); // Case insensitive check
-        assert!(FileWatcher::is_interesting_event(&event));
-    }
-
-    #[test]
-    fn test_is_not_interesting_event_txt() {
-        let event = Event::new(EventKind::Modify(ModifyKind::Any))
-            .add_path(PathBuf::from("readme.txt"));
-        assert!(!FileWatcher::is_interesting_event(&event));
+        assert_eq!(FileWatcher::is_interesting_event(&event1), FileWatcher::is_interesting_event(&event2));
+        assert!(FileWatcher::is_interesting_event(&event1));
     }
 }

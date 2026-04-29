@@ -12,15 +12,16 @@ name = "aiguard-windows-core"
 path = "src/main.rs"
 
 [dependencies]
-notify = "8.0.0"
+notify = "8.2.0"
 sysinfo = "0.33.1"
 tray-icon = "0.19.2"
 winit = "0.29.15"
-tokio = { version = "1.43.0", features = ["full"] }
+tokio = { version = "1.52.1", features = ["full"] }
 log = "0.4.25"
 env_logger = "0.11.6"
 serde = { version = "1.0", features = ["derive"] }
 toml = "0.8"
+chrono = "0.4.39"
 
 [dev-dependencies]
-tempfile = "3.17.1"
+tempfile = "3.27.0"
