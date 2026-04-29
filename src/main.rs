@@ -62,7 +62,8 @@ async fn main() {
                 let _ = status_tx.send(new_status).await;
             }
 
-            time::sleep(Duration::from_secs(2)).await;
+            // Ridotto il tempo di sleep per maggiore reattività
+            time::sleep(Duration::from_millis(50)).await;
         }
     });
 
@@ -70,7 +71,7 @@ async fn main() {
     #[allow(deprecated)]
     let _ = event_loop.run(move |_event, event_loop_window_target| {
         event_loop_window_target.set_control_flow(ControlFlow::WaitUntil(
-            std::time::Instant::now() + Duration::from_millis(100),
+            std::time::Instant::now() + Duration::from_millis(10),
         ));
 
         // Ricezione degli aggiornamenti di stato dal task asincrono
