@@ -3,10 +3,13 @@ use aiguard_windows_core::process_scanner::ProcessScanner;
 use aiguard_windows_core::tray::{TrayManager, GuardStatus};
 use aiguard_windows_core::i18n::Locales;
 use aiguard_windows_core::behavioral_analysis::BehavioralAnalysis;
+use aiguard_windows_core::forensics::ForensicsScanner;
 use std::sync::mpsc::channel;
 use std::time::Duration;
 use tokio::time;
 use winit::event_loop::{ControlFlow, EventLoop};
+use std::fs::OpenOptions;
+use std::io::Write;
 
 #[tokio::main]
 async fn main() {
@@ -46,7 +49,6 @@ async fn main() {
             let detected_ai = scanner.scan_for_ai_libraries();
             let mut new_status = GuardStatus::Verde;
 
-            // Logica Comportamentale su processi IA rilevati
             let mut behavioral_anomaly = false;
             for proc in &detected_ai {
                 if behavioral.record_access(proc) {
@@ -56,21 +58,23 @@ async fn main() {
             }
 
             if !detected_ai.is_empty() {
-                // Se rilevato ma non anomalo -> Giallo
-                // Se anomalo (troppi accessi) -> Rosso
                 new_status = if behavioral_anomaly { GuardStatus::Rosso } else { GuardStatus::Giallo };
             } else {
-                let mut found_file_event = false;
                 while let Ok(event) = rx.try_recv() {
                     if FileWatcher::is_interesting_event(&event) {
-                        found_file_event = true;
+                        new_status = GuardStatus::Giallo;
                         println!("{} {:?}", locales_task.file_event, event);
+
+                        // Forensics Check on event paths
+                        for path in &event.paths {
+                            if ForensicsScanner::detect_ai_watermark(path) {
+                                println!("Forensics: Marcatura IA rilevata in {:?}", path);
+                                log_security_event(path.to_string_lossy().as_ref(), "AI-GEN");
+                                new_status = GuardStatus::Rosso;
+                            }
+                        }
                         break;
                     }
-                }
-
-                if found_file_event {
-                    new_status = GuardStatus::Giallo;
                 }
             }
 
@@ -98,4 +102,15 @@ async fn main() {
             event_loop_window_target.exit();
         }
     });
+}
+
+fn log_security_event(filename: &str, tag: &str) {
+    if let Ok(mut file) = OpenOptions::new()
+        .append(true)
+        .create(true)
+        .open("logs/SECURITY_HISTORY.md")
+    {
+        let now = chrono::Utc::now().format("%Y-%m-%d %H:%M:%S");
+        let _ = writeln!(file, "| {} | {} | RILEVATO | {} | TRACCIATO |", now, filename, tag);
+    }
 }
