@@ -317,6 +317,11 @@
             </div>
             <span class="text-white font-bold text-sm tracking-tight">AIGuard.io</span>
         </div>
+        <div class="flex justify-center space-x-6 text-[10px] text-slate-500 mb-6 uppercase tracking-widest">
+            <a href="legal.html" class="hover:text-sky-400 transition">Termini e Condizioni</a>
+            <a href="legal.html" class="hover:text-sky-400 transition">Privacy Policy</a>
+            <a href="legal.html" class="hover:text-sky-400 transition">Cookie Policy</a>
+        </div>
         <p class="text-slate-500 text-[10px] max-w-2xl mx-auto leading-relaxed">
             AIGuard.io è un software di monitoraggio e supporto alla protezione dati. KEPROJECT S.R.L. declina ogni responsabilità per danni eccedenti il limite di € 50,00 per singola licenza. <br>
             &copy; 2024 KEPROJECT S.R.L. - P.IVA IT0123456789 - Foro di Pordenone.
@@ -433,7 +438,7 @@
         // Configurazione Stripe (Placeholder per chiavi API)
         const STRIPE_PUBLISHABLE_KEY = 'pk_test_xxxxxxxxxxxxxxxxxxxxxxxx'; // Inserire chiave reale nei segreti del repo
 
-        function processPayment() {
+        async function processPayment() {
             const tos1 = document.getElementById('tos-1').checked;
             const tos2 = document.getElementById('tos-2').checked;
             const tos3 = document.getElementById('tos-3').checked;
@@ -444,28 +449,42 @@
             }
 
             console.log("Inizializzazione checkout transazionale...");
+
+            // Generazione Proof Hash legale (SHA256 simulato)
+            const timestamp = new Date().toISOString();
+            const rawData = `USER_ACCEPTANCE|${timestamp}|TOS_V1.0|ART1341_1342|MARKETING`;
+            const msgUint8 = new TextEncoder().encode(rawData);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+            console.log(`Legal Proof Hash: ${hashHex}`);
+
             // Qui andrebbe l'integrazione con Stripe Checkout:
             // stripe.redirectToCheckout({ lineItems: [{ price: 'price_id', quantity: 1 }], ... });
 
-            alert("PROTOCOLLO ATTIVATO: Transazione simulata con successo. Reindirizzamento al download di Vigile Cieco...");
+            alert(`PROTOCOLLO ATTIVATO\n\nTransazione confermata.\nLegal Hash: ${hashHex.substring(0,16)}...\n\nReindirizzamento al download di Vigile Cieco...`);
             closeCheckout();
         }
 
-        // Scanner Logic
+        // Scanner Logic con Drag & Drop reale
         function startScanner() {
             const btn = document.getElementById('start-scan-btn');
             const progress = document.getElementById('scanner-progress');
+            btn.classList.add('hidden');
+            progress.classList.remove('hidden');
+            runScanSequence();
+        }
+
+        function runScanSequence(fileName = "ambiente_locale") {
             const bar = document.getElementById('scan-bar');
             const percentage = document.getElementById('scan-percentage');
             const status = document.getElementById('scan-status');
             const log = document.getElementById('scan-log');
             const results = document.getElementById('scanner-results');
 
-            btn.classList.add('hidden');
-            progress.classList.remove('hidden');
-
             const steps = [
-                { p: 15, s: "Inizializzazione...", l: "Verifica integrità ambiente locale..." },
+                { p: 15, s: "Inizializzazione...", l: `Verifica integrità ${fileName}...` },
                 { p: 35, s: "Scansione Processi...", l: "Ricerca firme AI (Torch, Onnx, WebNN)..." },
                 { p: 65, s: "Analisi Flussi...", l: "Rilevamento tentativi di esfiltrazione dati..." },
                 { p: 85, s: "Verifica Forense...", l: "Analisi metadati documenti sensibili..." },
@@ -484,12 +503,32 @@
                 } else {
                     clearInterval(interval);
                     setTimeout(() => {
-                        progress.classList.add('hidden');
+                        document.getElementById('scanner-progress').classList.add('hidden');
                         results.classList.remove('hidden');
                     }, 500);
                 }
-            }, 800);
+            }, 600);
         }
+
+        // Gestione Drag & Drop
+        const dropZone = document.getElementById('exposure-tool');
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.querySelector('.glass-card').style.borderColor = '#0ea5e9';
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.querySelector('.glass-card').style.borderColor = 'rgba(14, 165, 233, 0.2)';
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.querySelector('.glass-card').style.borderColor = 'rgba(14, 165, 233, 0.2)';
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                document.getElementById('start-scan-btn').classList.add('hidden');
+                document.getElementById('scanner-progress').classList.remove('hidden');
+                runScanSequence(files[0].name);
+            }
+        });
     </script>
 </body>
 </html>
