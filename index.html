@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://www.paypal.com/sdk/js?client-id=sb&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
     <title>AIGuard.io - Certifica il tuo Ingegno. Proteggi la tua Identità.</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -365,16 +366,18 @@
                     <label for="tos-3" class="text-[10px] text-slate-400 leading-tight">Acconsento al trattamento dei dati per finalità di marketing e comunicazioni commerciali.</label>
                 </div>
             </div>
-            <div class="bg-slate-900/50 p-4 rounded-2xl border border-white/5 mb-8">
-                <p class="text-[10px] text-slate-500 italic mb-2">Simulazione Transazione Sicura (Stripe)</p>
-                <div class="h-10 bg-slate-800 rounded-lg flex items-center px-4">
-                    <div class="w-8 h-4 bg-slate-700 rounded mr-4"></div>
-                    <div class="w-full h-2 bg-slate-700 rounded"></div>
+            <div id="payment-options" class="space-y-4 mb-8">
+                <div class="p-4 bg-slate-900/50 rounded-2xl border border-white/5">
+                    <p class="text-[10px] text-slate-500 italic mb-3">Abbonamento Mensile (1,90€)</p>
+                    <div id="paypal-button-container"></div>
+                </div>
+                <div class="p-4 bg-slate-900/50 rounded-2xl border border-white/5">
+                    <p class="text-[10px] text-slate-500 italic mb-3">Licenza Annuale (19€ - Risparmio 20%)</p>
+                    <a href="https://sumup.link/VigileCiecoAnnual" target="_blank" class="block w-full bg-[#3063E9] text-white font-bold py-3 rounded-xl text-center text-sm hover:opacity-90 transition">Paga con SumUp</a>
                 </div>
             </div>
             <div class="flex space-x-4">
-                <button onclick="closeCheckout()" class="flex-grow bg-slate-800 text-white font-bold py-4 rounded-2xl border border-slate-700">Annulla</button>
-                <button onclick="processPayment()" class="flex-grow bg-sky-600 hover:bg-sky-500 text-white font-bold py-4 rounded-2xl transition">Conferma Protocollo</button>
+                <button onclick="closeCheckout()" class="flex-grow bg-slate-800 text-white font-bold py-3 rounded-xl border border-slate-700 text-sm">Annulla</button>
             </div>
         </div>
     </div>
@@ -453,7 +456,8 @@
             "prezzo": "1,90€/mese per i primi 5.000 utenti (Blitzscaling).",
             "costo": "1,90€/mese. Il prezzo salirà dopo il lancio ufficiale.",
             "abbonamento": "Sì, flessibile. Puoi disdire quando vuoi.",
-            "bonifico": "No, solo Stripe per attivazione istantanea.",
+            "refund": "L'abbonamento annuale (19€) NON è rimborsabile.",
+            "bonifico": "No, solo PayPal o SumUp per attivazione istantanea.",
             "sconti": "Sì, per licenze multiple oltre le 10 unità.",
             "prova": "Puoi testare il widget Exposure qui sopra gratuitamente.",
             "ottengo": "Protezione deterministica e modulo Forensics completo.",
@@ -482,6 +486,25 @@
         function openCheckout(plan) {
             document.getElementById('checkout-modal').classList.remove('hidden');
             document.getElementById('checkout-modal').classList.add('flex');
+            initPayPal();
+        }
+
+        function initPayPal() {
+            if (document.getElementById('paypal-button-container').innerHTML !== "") return;
+
+            paypal.Buttons({
+                style: { shape: 'rect', color: 'blue', layout: 'vertical', label: 'subscribe' },
+                createSubscription: function(data, actions) {
+                    if (!document.getElementById('tos-1').checked || !document.getElementById('tos-2').checked || !document.getElementById('tos-3').checked) {
+                        alert("ERRORE LEGALE: Accetta tutti i termini prima di procedere.");
+                        return actions.reject();
+                    }
+                    return actions.subscription.create({ 'plan_id': 'P-VigileCiecoMonthly' });
+                },
+                onApprove: function(data, actions) {
+                    alert('Abbonamento attivato! ID: ' + data.subscriptionID);
+                }
+            }).render('#paypal-button-container');
         }
         function closeCheckout() {
             document.getElementById('checkout-modal').classList.add('hidden');
