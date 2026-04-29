@@ -26,7 +26,7 @@ async fn main() {
     tray_manager.setup();
 
     // Loop principale dell'interfaccia (necessario per tray-icon su Windows/macOS)
-    let event_loop = EventLoop::builder().build().unwrap();
+    let event_loop = EventLoop::new().unwrap();
 
     // Task asincrono per monitoraggio e scansione
     let (status_tx, mut status_rx) = tokio::sync::mpsc::channel::<GuardStatus>(10);
@@ -68,7 +68,6 @@ async fn main() {
     });
 
     // Gestione degli eventi dell'event loop
-    #[allow(deprecated)]
     let _ = event_loop.run(move |_event, event_loop_window_target| {
         event_loop_window_target.set_control_flow(ControlFlow::WaitUntil(
             std::time::Instant::now() + Duration::from_millis(10),

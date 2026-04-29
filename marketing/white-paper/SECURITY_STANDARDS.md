@@ -1,21 +1,22 @@
-# White Paper: Standard di Sicurezza AIGuard.io (2026)
+# AIGuard.io: Il Protocollo Standard per l'Uso Sicuro dell'IA in Azienda
 
-## Analisi dei Leak di Aprile 2026: Claude Code e Vercel
-Nel mese di aprile 2026, l'industria tecnologica è stata scossa da una serie di exfiltration di dati senza precedenti. Gli incidenti che hanno coinvolto Claude Code e l'infrastruttura di Vercel hanno evidenziato una vulnerabilità critica: l'ingestione silenziosa di segreti locali (API keys, file .env e database di password) da parte di agenti AI eccessivamente permissivi.
+## Introduzione
+Con l'esplosione dell'intelligenza artificiale generativa, le aziende si trovano ad affrontare una sfida senza precedenti: come sfruttare la potenza dell'IA senza esporre i propri dati sensibili. AIGuard.io nasce per definire il nuovo standard di sicurezza per questa era.
 
-### Il Problema: Exfiltration ad Alta Velocità
-I sistemi tradizionali di DLP (Data Loss Prevention) si sono dimostrati troppo lenti, reagendo in secondi o minuti, mentre gli agenti AI moderni possono analizzare e caricare intere directory di codice in millisecondi.
+## Il Protocollo AIGuard
+Il protocollo AIGuard si basa su tre pilastri fondamentali per garantire la sovranità dei dati:
 
-## La Soluzione AIGuard.io: Monitoraggio Local-First
-AIGuard.io introduce il concetto di **Monitoraggio Local-First ad Ultra-Bassa Latenza**.
+### 1. Monitoraggio Local-First
+A differenza delle soluzioni cloud-based che introducono latenza, AIGuard.io opera direttamente sul sistema operativo. Questo permette di intercettare ogni tentativo di accesso ai file sensibili in tempo reale, con una reattività certificata inferiore ai 50ms.
 
-### Caratteristiche Distintive:
-1. **Reattività < 50ms:** Il nostro core in Rust rileva l'accesso ai file critici prima che il buffer di rete dell'agente AI possa completare l'invio.
-2. **Scansione Euristica dei Processi:** Identifichiamo dinamicamente l'esecuzione di motori come ONNX Runtime e Torch, applicando policy di isolamento istantanee.
-3. **Zero Trust Locale:** Non ci fidiamo di alcun processo che tenti di accedere a file .pem, .kdbx o documenti legali senza esplicita autorizzazione dell'utente.
+### 2. Isolamento Dinamico dei Processi IA
+Identifichiamo ed isoliamo i processi che utilizzano librerie di calcolo neurale (come Torch e ONNX Runtime) quando tentano di accedere a directory contenenti segreti aziendali, documenti legali o chiavi crittografiche (.pem, .kdbx).
 
-## Conformità agli Standard 2026
-AIGuard.io è progettato per soddisfare i nuovi requisiti di conformità post-leak 2026, garantendo che lo sviluppo assistito dall'IA rimanga produttivo ma intrinsecamente sicuro.
+### 3. Trasparenza e Audit
+Ogni interazione tra i motori IA e il file system viene tracciata localmente, fornendo un registro di audit immutabile per la conformità alle normative sulla protezione dei dati (GDPR).
+
+## Conclusione
+AIGuard.io non è solo un software, ma un protocollo di fiducia che permette alle imprese di innovare con l'IA mantenendo il controllo totale sui propri asset informativi.
 
 ---
-*Documento tecnico riservato - AIGuard.io Engineering Team*
+*Ottobre 2024 - AIGuard.io Engineering & Security Team*
