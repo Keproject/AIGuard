@@ -53,9 +53,11 @@ dependencies = [
  "env_logger",
  "log",
  "notify",
+ "serde",
  "sysinfo",
  "tempfile",
  "tokio",
+ "toml",
  "tray-icon",
  "winit",
 ]

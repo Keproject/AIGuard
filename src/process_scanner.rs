@@ -14,9 +14,10 @@ impl ProcessScanner {
         }
     }
 
-    /// Aggiorna le informazioni sul sistema e controlla se i processi target sono in esecuzione.
+    /// Aggiorna le informazioni sui processi e controlla se i processi target sono in esecuzione.
     /// Restituisce una lista di nomi di processi che corrispondono ai criteri.
     pub fn scan_for_ai_libraries(&mut self) -> Vec<String> {
+        // In sysinfo 0.33, refresh_all() è più sicuro se non siamo sicuri degli argomenti di refresh_processes
         self.sys.refresh_all();
         let mut detected = Vec::new();
 
