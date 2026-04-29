@@ -9,6 +9,9 @@
         body {
             background-color: #0f172a; /* Slate 900 */
         }
+        #chat-widget {
+            transition: all 0.3s ease;
+        }
     </style>
 </head>
 <body class="text-slate-200 font-sans antialiased">
@@ -74,6 +77,90 @@
     <footer class="container mx-auto px-6 py-12 text-center text-slate-500 text-sm">
         <p>&copy; 2024 AIGuard.io - Proteggi la tua privacy digitale. Tutti i diritti riservati.</p>
     </footer>
+
+    <!-- Widget Chat Fluttuante -->
+    <div id="chat-widget" class="fixed bottom-6 right-6 w-80 md:w-96 bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden flex flex-col hidden">
+        <div class="bg-emerald-600 p-4 text-white font-bold flex justify-between items-center">
+            <span>Assistente AIGuard</span>
+            <button onclick="toggleChat()" class="text-white hover:text-emerald-200">✕</button>
+        </div>
+        <div id="chat-messages" class="h-64 overflow-y-auto p-4 space-y-4 text-sm bg-slate-900/50">
+            <div class="bg-slate-700 p-3 rounded-lg mr-8">Ciao! Come posso aiutarti con AIGuard? Chiedimi pure della nostra tecnologia.</div>
+        </div>
+        <div class="p-3 border-t border-slate-700 flex space-x-2">
+            <input id="chat-input" type="text" placeholder="Scrivi un messaggio..." class="flex-grow bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-emerald-500">
+            <button onclick="sendMessage()" class="bg-emerald-600 p-2 rounded-xl text-white">➤</button>
+        </div>
+    </div>
+
+    <!-- Bottone Apri Chat -->
+    <button id="chat-toggle" onclick="toggleChat()" class="fixed bottom-6 right-6 w-14 h-14 bg-emerald-600 rounded-full shadow-2xl flex items-center justify-center text-white text-2xl hover:bg-emerald-500 transition-all z-50">
+        💬
+    </button>
+
+    <script>
+        // Logica RAG semplificata basata sui file del repo
+        const knowledgeBase = {
+            "mission": "Monitorare .pdf, .docx, .pem, .kdbx e rilevare librerie onnxruntime e torch.",
+            "watcher": "Il modulo Watcher monitora file sensibili per prevenire l'ingestione non autorizzata dall'IA.",
+            "scanner": "Il Process Scanner rileva processi IA in esecuzione sul tuo PC.",
+            "tray": "L'interfaccia System Tray usa colori (Verde/Giallo/Rosso) per indicare lo stato di sicurezza.",
+            "github": "Abbiamo una GitHub Action per compilare automaticamente l'eseguibile Windows.",
+            "privacy": "AIGuard.io ti aiuta a riprendere il controllo dei tuoi dati dai motori IA."
+        };
+
+        function toggleChat() {
+            const widget = document.getElementById('chat-widget');
+            const toggle = document.getElementById('chat-toggle');
+            widget.classList.toggle('hidden');
+            if (!widget.classList.contains('hidden')) {
+                toggle.classList.add('hidden');
+            } else {
+                toggle.classList.remove('hidden');
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const messages = document.getElementById('chat-messages');
+            const text = input.value.trim().toLowerCase();
+
+            if (!text) return;
+
+            // Messaggio utente
+            appendMessage(input.value, 'user');
+            input.value = '';
+
+            // Risposta "RAG"
+            setTimeout(() => {
+                let response = "Sto ancora imparando questa parte, ma il mio creatore ti risponderà presto.";
+
+                for (let key in knowledgeBase) {
+                    if (text.includes(key)) {
+                        response = knowledgeBase[key];
+                        break;
+                    }
+                }
+
+                appendMessage(response, 'bot');
+            }, 500);
+        }
+
+        function appendMessage(text, sender) {
+            const messages = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = sender === 'user'
+                ? 'bg-emerald-700 p-3 rounded-lg ml-8 self-end text-white'
+                : 'bg-slate-700 p-3 rounded-lg mr-8 text-slate-200';
+            div.innerText = text;
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        document.getElementById('chat-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
 
 </body>
 </html>

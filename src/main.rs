@@ -1,14 +1,10 @@
-mod watcher;
-mod process_scanner;
-mod tray;
-
+use aiguard_windows_core::watcher::FileWatcher;
+use aiguard_windows_core::process_scanner::ProcessScanner;
+use aiguard_windows_core::tray::{TrayManager, GuardStatus};
 use std::sync::mpsc::channel;
 use std::time::Duration;
 use tokio::time;
 use winit::event_loop::{ControlFlow, EventLoop};
-use crate::watcher::FileWatcher;
-use crate::process_scanner::ProcessScanner;
-use crate::tray::{TrayManager, GuardStatus};
 
 #[tokio::main]
 async fn main() {
@@ -61,7 +57,6 @@ async fn main() {
             }
 
             // Aggiorna lo stato se è cambiato
-            // Nota: in una versione reale il Giallo potrebbe avere un timeout
             if std::mem::discriminant(&new_status) != std::mem::discriminant(&current_status) {
                 current_status = new_status;
                 let _ = status_tx.send(new_status).await;
