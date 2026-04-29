@@ -3,6 +3,7 @@ use tray_icon::{
     TrayIcon, TrayIconBuilder, Icon,
     menu::MenuEvent,
 };
+use crate::i18n::Locales;
 
 /// Stati possibili per l'applicazione, che determinano il colore dell'icona.
 #[derive(Clone, Copy)]
@@ -15,13 +16,15 @@ pub enum GuardStatus {
 pub struct TrayManager {
     tray_icon: Option<TrayIcon>,
     quit_id: String,
+    locales: Locales,
 }
 
 impl TrayManager {
-    pub fn new() -> Self {
+    pub fn new(locales: Locales) -> Self {
         Self {
             tray_icon: None,
             quit_id: String::new(),
+            locales,
         }
     }
 
@@ -30,13 +33,13 @@ impl TrayManager {
         let icon = Self::create_icon_stateless(GuardStatus::Verde);
 
         let menu = Menu::new();
-        let quit_item = MenuItem::new("Esci", true, None);
+        let quit_item = MenuItem::new(&self.locales.quit, true, None);
         self.quit_id = quit_item.id().0.clone();
         menu.append(&quit_item).unwrap();
 
         let tray_icon = TrayIconBuilder::new()
             .with_menu(Box::new(menu))
-            .with_tooltip("AIGuard - Protetto")
+            .with_tooltip(&self.locales.protected)
             .with_icon(icon)
             .build()
             .unwrap();
@@ -52,13 +55,13 @@ impl TrayManager {
 
             match status {
                 GuardStatus::Verde => {
-                    let _ = tray.set_tooltip(Some("AIGuard - Sicuro"));
+                    let _ = tray.set_tooltip(Some(&self.locales.secure));
                 },
                 GuardStatus::Giallo => {
-                    let _ = tray.set_tooltip(Some("AIGuard - Attenzione: File sensibili rilevati"));
+                    let _ = tray.set_tooltip(Some(&self.locales.warning));
                 },
                 GuardStatus::Rosso => {
-                    let _ = tray.set_tooltip(Some("AIGuard - ALLERTA: Librerie AI rilevate"));
+                    let _ = tray.set_tooltip(Some(&self.locales.alert));
                 }
             }
         }

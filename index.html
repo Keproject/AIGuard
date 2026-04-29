@@ -6,12 +6,9 @@
     <title>AIGuard.io - Protezione Dati contro l'IA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            background-color: #0f172a; /* Slate 900 */
-        }
-        #chat-widget {
-            transition: all 0.3s ease;
-        }
+        body { background-color: #0f172a; }
+        #chat-widget { transition: all 0.3s ease; }
+        #drop-zone.dragover { border-color: #10b981; background-color: rgba(16, 185, 129, 0.1); }
     </style>
 </head>
 <body class="text-slate-200 font-sans antialiased">
@@ -19,149 +16,272 @@
     <!-- Navigazione -->
     <nav class="container mx-auto px-6 py-8 flex justify-between items-center">
         <div class="flex items-center space-x-3">
-            <!-- Icona Scudo SVG -->
             <svg class="w-10 h-10 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
             </svg>
             <span class="text-2xl font-bold tracking-tight text-white">AIGuard.io</span>
         </div>
+        <!-- Selettore Lingua -->
+        <div class="flex space-x-2 md:space-x-4 text-xs md:text-sm font-medium">
+            <button onclick="setLanguage('it')" class="hover:text-emerald-500 transition">IT</button>
+            <button onclick="setLanguage('en')" class="hover:text-emerald-500 transition">EN</button>
+            <button onclick="setLanguage('de')" class="hover:text-emerald-500 transition">DE</button>
+            <button onclick="setLanguage('fr')" class="hover:text-emerald-500 transition">FR</button>
+            <button onclick="setLanguage('es')" class="hover:text-emerald-500 transition">ES</button>
+        </div>
     </nav>
 
     <!-- Sezione Hero -->
-    <header class="container mx-auto px-6 pt-16 pb-24 text-center">
-        <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-8 leading-tight">
-            Riprendi il controllo dei tuoi <span class="text-emerald-500 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500 text-6xl">dati</span> dai motori IA
+    <header class="container mx-auto px-6 pt-16 pb-12 text-center">
+        <h1 id="hero-title" class="text-5xl md:text-7xl font-extrabold text-white mb-8 leading-tight">
+            Riprendi il controllo dei tuoi <span class="text-emerald-500 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">dati</span> dai motori IA
         </h1>
-        <p class="text-xl text-slate-400 max-w-2xl mx-auto mb-12">
+        <p id="hero-subtitle" class="text-xl text-slate-400 max-w-2xl mx-auto mb-12">
             La prima barriera di difesa per Windows che impedisce l'ingestione non autorizzata dei tuoi documenti privati da parte di modelli AI invasivi.
         </p>
 
         <!-- Form Waitlist -->
         <div class="max-w-md mx-auto bg-slate-800 p-2 rounded-2xl border border-slate-700 shadow-2xl flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-            <input type="email" placeholder="Inserisci la tua email" class="flex-grow bg-transparent px-4 py-3 text-white focus:outline-none focus:ring-0 placeholder-slate-500">
-            <button class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-6 rounded-xl transition-all duration-200">
+            <input id="email-input" type="email" placeholder="Inserisci la tua email" class="flex-grow bg-transparent px-4 py-3 text-white focus:outline-none placeholder-slate-500">
+            <button id="waitlist-btn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-6 rounded-xl transition-all duration-200">
                 Ottieni Accesso Anticipato
             </button>
         </div>
     </header>
 
-    <!-- Caratteristiche -->
-    <section class="container mx-auto px-6 py-24 border-t border-slate-800">
-        <div class="grid md:grid-cols-3 gap-12 text-center">
-
-            <!-- Feature 1 -->
-            <div class="p-8 rounded-3xl bg-slate-800/50 border border-slate-700">
-                <div class="w-12 h-12 bg-emerald-900/30 text-emerald-500 rounded-lg flex items-center justify-center mx-auto mb-6 text-2xl">📁</div>
-                <h3 class="text-xl font-bold text-white mb-4">Monitoraggio File Sensibili</h3>
-                <p class="text-slate-400">Protezione immediata per .pdf, .docx, .pem e .kdbx. Ricevi alert non appena vengono toccati.</p>
-            </div>
-
-            <!-- Feature 2 -->
-            <div class="p-8 rounded-3xl bg-slate-800/50 border border-slate-700">
-                <div class="w-12 h-12 bg-cyan-900/30 text-cyan-500 rounded-lg flex items-center justify-center mx-auto mb-6 text-2xl">🧠</div>
-                <h3 class="text-xl font-bold text-white mb-4">Scansione Processi IA</h3>
-                <p class="text-slate-400">Rileva librerie come Torch e ONNX Runtime che tentano di analizzare i tuoi dati in locale.</p>
-            </div>
-
-            <!-- Feature 3 -->
-            <div class="p-8 rounded-3xl bg-slate-800/50 border border-slate-700">
-                <div class="w-12 h-12 bg-indigo-900/30 text-indigo-500 rounded-lg flex items-center justify-center mx-auto mb-6 text-2xl">🔔</div>
-                <h3 class="text-xl font-bold text-white mb-4">Alert System Tray</h3>
-                <p class="text-slate-400">Notifiche silenziose e colori di stato (Verde/Giallo/Rosso) integrati direttamente nella barra di Windows.</p>
-            </div>
-
+    <!-- Tool: Check My AI Exposure -->
+    <section class="container mx-auto px-6 py-12">
+        <div id="drop-zone" class="max-w-3xl mx-auto bg-slate-800 border-2 border-dashed border-slate-700 rounded-3xl p-12 text-center transition-all duration-200 shadow-2xl">
+            <div class="text-4xl mb-4">🔍</div>
+            <h2 id="scanner-title" class="text-2xl font-bold text-white mb-2">Check My AI Exposure</h2>
+            <p id="scanner-desc" class="text-slate-400 mb-8">Trascina qui i tuoi file per verificare termini sensibili (Password, IBAN, GDPR).</p>
+            <input type="file" id="file-input" class="hidden" multiple>
+            <button id="scanner-btn" onclick="document.getElementById('file-input').click()" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-6 rounded-xl transition-all">
+                Seleziona File
+            </button>
+            <div id="scan-results" class="mt-8 space-y-2 text-left max-w-md mx-auto"></div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="container mx-auto px-6 py-12 text-center text-slate-500 text-sm">
-        <p>&copy; 2024 AIGuard.io - Proteggi la tua privacy digitale. Tutti i diritti riservati.</p>
-    </footer>
+    <!-- Caratteristiche -->
+    <section class="container mx-auto px-6 py-24 border-t border-slate-800">
+        <div class="grid md:grid-cols-3 gap-12 text-center">
+            <div class="p-8 rounded-3xl bg-slate-800/50 border border-slate-700">
+                <div class="w-12 h-12 bg-emerald-900/30 text-emerald-500 rounded-lg flex items-center justify-center mx-auto mb-6 text-2xl">📁</div>
+                <h3 id="feat1-title" class="text-xl font-bold text-white mb-4">Monitoraggio File</h3>
+                <p id="feat1-desc" class="text-slate-400">Protezione immediata per .pdf, .docx, .pem e .kdbx.</p>
+            </div>
+            <div class="p-8 rounded-3xl bg-slate-800/50 border border-slate-700">
+                <div class="w-12 h-12 bg-cyan-900/30 text-cyan-500 rounded-lg flex items-center justify-center mx-auto mb-6 text-2xl">🧠</div>
+                <h3 id="feat2-title" class="text-xl font-bold text-white mb-4">Scansione Processi</h3>
+                <p id="feat2-desc" class="text-slate-400">Rileva librerie come Torch e ONNX Runtime in tempo reale.</p>
+            </div>
+            <div class="p-8 rounded-3xl bg-slate-800/50 border border-slate-700">
+                <div class="w-12 h-12 bg-indigo-900/30 text-indigo-500 rounded-lg flex items-center justify-center mx-auto mb-6 text-2xl">🔔</div>
+                <h3 id="feat3-title" class="text-xl font-bold text-white mb-4">Alert System Tray</h3>
+                <p id="feat3-desc" class="text-slate-400">Notifiche silenziose integrate nella barra di Windows.</p>
+            </div>
+        </div>
+    </section>
 
-    <!-- Widget Chat Fluttuante -->
-    <div id="chat-widget" class="fixed bottom-6 right-6 w-80 md:w-96 bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden flex flex-col hidden">
+    <!-- Widget Chat -->
+    <div id="chat-widget" class="fixed bottom-6 right-6 w-80 md:w-96 bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden flex flex-col hidden z-[100]">
         <div class="bg-emerald-600 p-4 text-white font-bold flex justify-between items-center">
-            <span>Assistente AIGuard</span>
-            <button onclick="toggleChat()" class="text-white hover:text-emerald-200">✕</button>
+            <span id="chat-title">Assistente AIGuard</span>
+            <button onclick="toggleChat()" class="text-white">✕</button>
         </div>
-        <div id="chat-messages" class="h-64 overflow-y-auto p-4 space-y-4 text-sm bg-slate-900/50">
-            <div class="bg-slate-700 p-3 rounded-lg mr-8">Ciao! Come posso aiutarti con AIGuard? Chiedimi pure della nostra tecnologia.</div>
-        </div>
+        <div id="chat-messages" class="h-64 overflow-y-auto p-4 space-y-4 text-sm bg-slate-900/50 text-left"></div>
         <div class="p-3 border-t border-slate-700 flex space-x-2">
-            <input id="chat-input" type="text" placeholder="Scrivi un messaggio..." class="flex-grow bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-emerald-500">
+            <input id="chat-input" type="text" class="flex-grow bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none">
             <button onclick="sendMessage()" class="bg-emerald-600 p-2 rounded-xl text-white">➤</button>
         </div>
     </div>
-
-    <!-- Bottone Apri Chat -->
-    <button id="chat-toggle" onclick="toggleChat()" class="fixed bottom-6 right-6 w-14 h-14 bg-emerald-600 rounded-full shadow-2xl flex items-center justify-center text-white text-2xl hover:bg-emerald-500 transition-all z-50">
-        💬
-    </button>
+    <button id="chat-toggle" onclick="toggleChat()" class="fixed bottom-6 right-6 w-14 h-14 bg-emerald-600 rounded-full shadow-2xl flex items-center justify-center text-white text-2xl z-50">💬</button>
 
     <script>
-        // Logica RAG semplificata basata sui file del repo
-        const knowledgeBase = {
-            "mission": "Monitorare .pdf, .docx, .pem, .kdbx e rilevare librerie onnxruntime e torch.",
-            "watcher": "Il modulo Watcher monitora file sensibili per prevenire l'ingestione non autorizzata dall'IA.",
-            "scanner": "Il Process Scanner rileva processi IA in esecuzione sul tuo PC.",
-            "tray": "L'interfaccia System Tray usa colori (Verde/Giallo/Rosso) per indicare lo stato di sicurezza.",
-            "github": "Abbiamo una GitHub Action per compilare automaticamente l'eseguibile Windows.",
-            "privacy": "AIGuard.io ti aiuta a riprendere il controllo dei tuoi dati dai motori IA."
+        const translations = {
+            it: {
+                heroTitle: 'Riprendi il controllo dei tuoi <span class="text-emerald-500 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">dati</span> dai motori IA',
+                heroSubtitle: 'La prima barriera di difesa per Windows che impedisce l\'ingestione non autorizzata dei tuoi documenti privati.',
+                emailPlaceholder: 'Inserisci la tua email',
+                waitlistBtn: 'Ottieni Accesso Anticipato',
+                scannerTitle: 'Check My AI Exposure',
+                scannerDesc: 'Trascina qui i tuoi file per verificare termini sensibili (Password, IBAN, GDPR).',
+                scannerBtn: 'Seleziona File',
+                feat1Title: 'Monitoraggio File',
+                feat1Desc: 'Protezione immediata per .pdf, .docx, .pem e .kdbx.',
+                feat2Title: 'Scansione Processi',
+                feat2Desc: 'Rileva librerie come Torch e ONNX Runtime in tempo reale.',
+                feat3Title: 'Alert System Tray',
+                feat3Desc: 'Notifiche silenziose integrate nella barra di Windows.',
+                chatTitle: 'Assistente AIGuard',
+                chatWelcome: 'Ciao! Chiedimi pure della nostra tecnologia o degli standard 2026.',
+                chatFallback: 'Sto ancora imparando questa parte, ma il mio creatore ti risponderà presto.',
+                rischio: 'RISCHIO', sicuro: 'SICURO', risultati: 'Risultati Scansione:',
+                chatInputPlaceholder: 'Scrivi un messaggio...',
+                knowledge: { "standard": "Il protocollo AIGuard.io definisce lo standard aziendale per l'uso sicuro dell'IA." }
+            },
+            en: {
+                heroTitle: 'Take back control of your <span class="text-emerald-500 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">data</span> from AI engines',
+                heroSubtitle: 'The first defense for Windows that prevents unauthorized ingestion of your private documents.',
+                emailPlaceholder: 'Enter your email',
+                waitlistBtn: 'Get Early Access',
+                scannerTitle: 'Check My AI Exposure',
+                scannerDesc: 'Drag files here to check for sensitive terms (Password, IBAN, GDPR).',
+                scannerBtn: 'Select Files',
+                feat1Title: 'File Monitoring',
+                feat1Desc: 'Instant protection for .pdf, .docx, .pem, and .kdbx.',
+                feat2Title: 'Process Scanning',
+                feat2Desc: 'Detects Torch and ONNX Runtime libraries in real-time.',
+                feat3Title: 'System Tray Alert',
+                feat3Desc: 'Silent notifications integrated into the Windows bar.',
+                chatTitle: 'AIGuard Assistant',
+                chatWelcome: 'Hello! Ask me about our technology or the 2026 standards.',
+                chatFallback: 'I\'m still learning this part, but my creator will answer soon.',
+                rischio: 'RISK', sicuro: 'SECURE', risultati: 'Scan Results:',
+                chatInputPlaceholder: 'Type a message...',
+                knowledge: { "standard": "The AIGuard.io protocol defines the enterprise standard for secure AI usage." }
+            },
+            de: {
+                heroTitle: 'Holen Sie sich die Kontrolle über Ihre <span class="text-emerald-500 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">Daten</span> von KI-Engines zurück',
+                heroSubtitle: 'Der erste Schutz für Windows, der die unbefugte Aufnahme Ihrer privaten Dokumente verhindert.',
+                emailPlaceholder: 'E-Mail eingeben',
+                waitlistBtn: 'Frühzeitigen Zugriff erhalten',
+                scannerTitle: 'Check My AI Exposure',
+                scannerDesc: 'Dateien hierher ziehen, um nach sensiblen Begriffen (Passwort, IBAN, DSGVO) zu suchen.',
+                scannerBtn: 'Dateien auswählen',
+                feat1Title: 'Dateiüberwachung',
+                feat1Desc: 'Sofortiger Schutz für .pdf, .docx, .pem und .kdbx.',
+                feat2Title: 'Prozess-Scanning',
+                feat2Desc: 'Erkennt Torch- und ONNX-Bibliotheken in Echtzeit.',
+                feat3Title: 'System Tray Alarm',
+                feat3Desc: 'Geräuschlose Benachrichtigungen in der Windows-Leiste.',
+                chatTitle: 'AIGuard Assistent',
+                chatWelcome: 'Hallo! Fragen Sie mich nach unserer Technologie oder den Standards 2026.',
+                chatFallback: 'Ich lerne diesen Teil noch, aber mein Schöpfer wird bald antworten.',
+                rischio: 'RISIKO', sicuro: 'SICHER', risultati: 'Scan-Ergebnisse:',
+                chatInputPlaceholder: 'Nachricht schreiben...',
+                knowledge: { "standard": "Das AIGuard.io-Protokoll definiert den Unternehmensstandard für die sichere KI-Nutzung." }
+            },
+            fr: {
+                heroTitle: 'Reprenez le contrôle de vos <span class="text-emerald-500 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">données</span> des moteurs IA',
+                heroSubtitle: 'La première défense pour Windows qui empêche l\'ingestion non autorisée de vos documents privés.',
+                emailPlaceholder: 'Entrez votre email',
+                waitlistBtn: 'Obtenez un accès anticipé',
+                scannerTitle: 'Check My AI Exposure',
+                scannerDesc: 'Faites glisser des fichiers ici pour vérifier les termes sensibles (Mot de passe, IBAN, RGPD).',
+                scannerBtn: 'Sélectionner des fichiers',
+                feat1Title: 'Surveillance des fichiers',
+                feat1Desc: 'Protection instantanée pour .pdf, .docx, .pem et .kdbx.',
+                feat2Title: 'Analyse des processus',
+                feat2Desc: 'Détecte les bibliothèques Torch et ONNX Runtime en temps réel.',
+                feat3Title: 'Alerte de la barre d\'état',
+                feat3Desc: 'Notifications silencieuses intégrées à la barre Windows.',
+                chatTitle: 'Assistant AIGuard',
+                chatWelcome: 'Bonjour ! Interrogez-moi sur notre technologie ou les normes 2026.',
+                chatFallback: 'J\'apprends encore cette partie, mais mon créateur répondra bientôt.',
+                rischio: 'RISQUE', sicuro: 'SÉCURISÉ', risultati: 'Résultats du scan :',
+                chatInputPlaceholder: 'Tapez un message...',
+                knowledge: { "standard": "Le protocole AIGuard.io définit la norme d'entreprise pour une utilisation sécurisée de l'IA." }
+            },
+            es: {
+                heroTitle: 'Recupere el control de sus <span class="text-emerald-500 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">datos</span> de los motores de IA',
+                heroSubtitle: 'La primera defensa para Windows que evita la ingestión no autorizada de sus documentos privados.',
+                emailPlaceholder: 'Ingrese su correo',
+                waitlistBtn: 'Obtenga acceso anticipado',
+                scannerTitle: 'Check My AI Exposure',
+                scannerDesc: 'Arrastre archivos aquí para verificar términos sensibles (Contraseña, IBAN, GDPR).',
+                scannerBtn: 'Seleccionar archivos',
+                feat1Title: 'Monitoreo de archivos',
+                feat1Desc: 'Protección instantánea para .pdf, .docx, .pem y .kdbx.',
+                feat2Title: 'Escaneo de procesos',
+                feat2Desc: 'Detecta bibliotecas Torch y ONNX Runtime en tiempo real.',
+                feat3Title: 'Alerta de bandeja de sistema',
+                feat3Desc: 'Notificaciones silenciosas integradas en la barra de Windows.',
+                chatTitle: 'Asistente de AIGuard',
+                chatWelcome: '¡Hola! Pregúntame sobre nuestra tecnología o los estándares 2026.',
+                chatFallback: 'Todavía estoy aprendiendo esta parte, ma mi creador responderà pronto.',
+                rischio: 'RIESGO', sicuro: 'SEGURO', risultati: 'Resultados del escaneo:',
+                chatInputPlaceholder: 'Escriba un mensaje...',
+                knowledge: { "standard": "El protocolo AIGuard.io define el estándar empresarial per el uso seguro de la IA." }
+            }
         };
 
-        function toggleChat() {
-            const widget = document.getElementById('chat-widget');
-            const toggle = document.getElementById('chat-toggle');
-            widget.classList.toggle('hidden');
-            if (!widget.classList.contains('hidden')) {
-                toggle.classList.add('hidden');
-            } else {
-                toggle.classList.remove('hidden');
-            }
+        let currentLang = 'en';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            document.getElementById('hero-title').innerHTML = t.heroTitle;
+            document.getElementById('hero-subtitle').innerText = t.heroSubtitle;
+            document.getElementById('email-input').placeholder = t.emailPlaceholder;
+            document.getElementById('waitlist-btn').innerText = t.waitlistBtn;
+            document.getElementById('scanner-title').innerText = t.scannerTitle;
+            document.getElementById('scanner-desc').innerText = t.scannerDesc;
+            document.getElementById('scanner-btn').innerText = t.scannerBtn;
+            document.getElementById('feat1-title').innerText = t.feat1Title;
+            document.getElementById('feat1-desc').innerText = t.feat1Desc;
+            document.getElementById('feat2-title').innerText = t.feat2Title;
+            document.getElementById('feat2-desc').innerText = t.feat2Desc;
+            document.getElementById('feat3-title').innerText = t.feat3Title;
+            document.getElementById('feat3-desc').innerText = t.feat3Desc;
+            document.getElementById('chat-title').innerText = t.chatTitle;
+            document.getElementById('chat-input').placeholder = t.chatInputPlaceholder;
+            document.getElementById('chat-messages').innerHTML = `<div class="bg-slate-700 p-3 rounded-lg mr-8 text-slate-200">${t.chatWelcome}</div>`;
         }
 
+        const userLang = navigator.language.split('-')[0];
+        if (translations[userLang]) setLanguage(userLang);
+        else setLanguage('en');
+
+        function checkRisk(filename) {
+            const riskyPatterns = ['api', 'key', 'secret', '.env', '.kdbx', '.pem', 'legal', 'contract', 'password', 'passwort', 'iban', 'gdpr', 'dsgvo', 'mot de passe', 'contraseña'];
+            const lowName = filename.toLowerCase();
+            return riskyPatterns.some(pattern => lowName.includes(pattern));
+        }
+
+        const dropZone = document.getElementById('drop-zone');
+        const resultsDiv = document.getElementById('scan-results');
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            resultsDiv.innerHTML = `<p class="text-white font-bold mb-2">${translations[currentLang].risultati}</p>`;
+            [...e.dataTransfer.files].forEach(file => {
+                const risk = checkRisk(file.name);
+                const color = risk ? 'text-red-400' : 'text-emerald-400';
+                const status = risk ? translations[currentLang].rischio : translations[currentLang].sicuro;
+                const div = document.createElement('div');
+                div.className = `p-2 rounded bg-slate-900/50 flex justify-between border border-slate-700`;
+                div.innerHTML = `<span>${file.name}</span> <span class="${color} font-bold">${status}</span>`;
+                resultsDiv.appendChild(div);
+            });
+        });
+        dropZone.addEventListener('dragover', (e) => e.preventDefault());
+
+        function toggleChat() { document.getElementById('chat-widget').classList.toggle('hidden'); }
         function sendMessage() {
             const input = document.getElementById('chat-input');
             const messages = document.getElementById('chat-messages');
-            const text = input.value.trim().toLowerCase();
+            if (!input.value) return;
+            const userDiv = document.createElement('div');
+            userDiv.className = 'bg-emerald-700 p-3 rounded-lg ml-8 self-end text-white';
+            userDiv.innerText = input.value;
+            messages.appendChild(userDiv);
 
-            if (!text) return;
-
-            // Messaggio utente
-            appendMessage(input.value, 'user');
+            const text = input.value.toLowerCase();
             input.value = '';
-
-            // Risposta "RAG"
             setTimeout(() => {
-                let response = "Sto ancora imparando questa parte, ma il mio creatore ti risponderà presto.";
-
-                for (let key in knowledgeBase) {
-                    if (text.includes(key)) {
-                        response = knowledgeBase[key];
-                        break;
-                    }
+                const botDiv = document.createElement('div');
+                botDiv.className = 'bg-slate-700 p-3 rounded-lg mr-8 text-slate-200';
+                let response = translations[currentLang].chatFallback;
+                const knowledge = translations[currentLang].knowledge;
+                for (let key in knowledge) {
+                    if (text.includes(key)) { response = knowledge[key]; break; }
                 }
-
-                appendMessage(response, 'bot');
+                botDiv.innerText = response;
+                messages.appendChild(botDiv);
+                messages.scrollTop = messages.scrollHeight;
             }, 500);
         }
-
-        function appendMessage(text, sender) {
-            const messages = document.getElementById('chat-messages');
-            const div = document.createElement('div');
-            div.className = sender === 'user'
-                ? 'bg-emerald-700 p-3 rounded-lg ml-8 self-end text-white'
-                : 'bg-slate-700 p-3 rounded-lg mr-8 text-slate-200';
-            div.innerText = text;
-            messages.appendChild(div);
-            messages.scrollTop = messages.scrollHeight;
-        }
-
-        document.getElementById('chat-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
     </script>
-
 </body>
 </html>
-<!-- Creato con amore per la missione AIGuard Core -->
