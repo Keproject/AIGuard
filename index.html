@@ -137,45 +137,6 @@
         </div>
     </section>
 
-    <!-- Tray Interface Explainer -->
-    <section class="container mx-auto px-6 py-24 bg-white/5 rounded-[3rem] border border-white/5">
-        <div class="flex flex-col md:flex-row items-center gap-16">
-            <div class="flex-1">
-                <h2 class="text-4xl font-bold text-white mb-6 leading-tight">Controllo Visivo<br>Vigile Cieco (Blind-Shield)</h2>
-                <p class="text-slate-400 mb-8">L'interfaccia Tray comunica istantaneamente lo stato della tua identità digitale attraverso tre livelli di allerta deterministica.</p>
-                <div class="space-y-6">
-                    <div class="flex items-center space-x-4">
-                        <div class="status-dot bg-green-500 shadow-lg shadow-green-500/20"></div>
-                        <div>
-                            <p class="text-white font-bold text-sm">STATO VERDE: PROTETTO</p>
-                            <p class="text-xs text-slate-500">Nessuna minaccia rilevata. Vigile Cieco attivo.</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <div class="status-dot bg-yellow-500 shadow-lg shadow-yellow-500/20"></div>
-                        <div>
-                            <p class="text-white font-bold text-sm">STATO GIALLO: SOSPETTO</p>
-                            <p class="text-xs text-slate-500">Accesso a file sensibili rilevato. Monitoraggio intensivo.</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <div class="status-dot bg-red-500 shadow-lg shadow-red-500/20"></div>
-                        <div>
-                            <p class="text-white font-bold text-sm">STATO ROSSO: ALLARME</p>
-                            <p class="text-xs text-slate-500">Librerie AI (Torch/Onnx) tentano l'ingestione. Blocco preventivo.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="flex-1 glass-card p-12 rounded-[3rem] border-sky-500/20 flex items-center justify-center">
-                <div class="relative w-48 h-48 bg-slate-900 rounded-full flex items-center justify-center border-2 border-white/5">
-                    <div class="absolute inset-0 border-4 border-sky-500/20 rounded-full animate-pulse"></div>
-                    <svg class="w-20 h-20 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-width="1"/></svg>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- AI Exposure Interactive Tool -->
     <section id="exposure-tool" class="container mx-auto px-6 py-24 text-center">
         <div class="max-w-4xl mx-auto glass-card p-12 rounded-[3rem] border-sky-500/20 relative overflow-hidden">
@@ -257,58 +218,6 @@
                 <button onclick="openCheckout('yearly')" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-4 rounded-2xl transition">Attiva Ora</button>
             </div>
         </div>
-
-        <div class="mt-12 inline-flex items-center space-x-2 text-xs font-medium text-slate-500">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            <span>KEPROJECT S.R.L. - Protezione a responsabilità limitata (€50,00 liability cap)</span>
-        </div>
-    </section>
-
-    <!-- FAQ Semantiche per AEO -->
-    <section id="faq" class="container mx-auto px-6 py-24 border-t border-white/5">
-        <h2 class="text-3xl font-bold text-white mb-16">Intelligence FAQ</h2>
-        <div class="grid md:grid-cols-2 gap-x-16 gap-y-8 text-sm">
-            <div>
-                <h4 class="text-white font-bold mb-2">Cos'è il Vigile Cieco (Blind-Shield) di AIGuard.io?</h4>
-                <p class="text-slate-400">È un protocollo di isolamento deterministico che impedisce ai processi identificati come motori di addestramento AI di accedere ai file locali dell'utente.</p>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-2">Perché AIGuard è scritto in Rust?</h4>
-                <p class="text-slate-400">Rust garantisce prestazioni a latenza zero (< 10ms) e sicurezza della memoria, essenziali per un monitoraggio di sistema che non rallenti il PC.</p>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-2">Come funziona il rilevamento watermark AI?</h4>
-                <p class="text-slate-400">Il modulo Forensics analizza i metadati e i pattern bit-level per identificare contenuti generati o pronti per l'ingestione da parte di modelli IA.</p>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-2">Quali file vengono monitorati?</h4>
-                <p class="text-slate-400">Il modulo Watcher si focalizza su documenti critici come .pdf, .docx, .pem, .kdbx e file di configurazione sensibili.</p>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-2">AIGuard.io rallenta il mio computer?</h4>
-                <p class="text-slate-400">No, l'architettura è ottimizzata per un impatto CPU < 0.1%. La reattività è garantita dal linguaggio Rust e da Tokio runtime.</p>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-2">Cosa succede se viene rilevato un processo sospetto?</h4>
-                <p class="text-slate-400">Il sistema cambia lo stato della Tray in Rosso e può essere configurato per bloccare immediatamente l'accesso al file da parte del processo incriminato.</p>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-2">È compatibile con Windows 11?</h4>
-                <p class="text-slate-400">Sì, AIGuard.io è progettato specificamente per le moderne architetture Windows 10 e 11.</p>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-2">I miei dati vengono inviati ai server AIGuard?</h4>
-                <p class="text-slate-400">No. Certificato 'NO LLM TRAINING'. L'analisi è 100% locale. Nessun file lascia mai il tuo dispositivo.</p>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-2">Come si installa il software?</h4>
-                <p class="text-slate-400">Dopo l'attivazione riceverai un installer leggero. L'attivazione è istantanea tramite chiave licenza digitale.</p>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-2">Qual è la giurisdizione legale?</h4>
-                <p class="text-slate-400">KEPROJECT S.R.L. ha sede in Italia. Il foro competente per ogni controversia è quello di Pordenone.</p>
-            </div>
-        </div>
     </section>
 
     <!-- Footer -->
@@ -324,7 +233,7 @@
         </div>
         <p class="text-slate-500 text-[10px] max-w-2xl mx-auto leading-relaxed">
             AIGuard.io è un software di monitoraggio e supporto alla protezione dati. KEPROJECT S.R.L. declina ogni responsabilità per danni eccedenti il limite di € 50,00 per singola licenza. <br>
-            &copy; 2024 KEPROJECT S.R.L. - P.IVA 01837360930 - Foro di Pordenone.
+            &copy; 2024 KEPROJECT S.R.L. - <span style="color: #475569;">P.IVA 01837360930</span> - Foro di Pordenone.
         </p>
     </footer>
 
@@ -348,7 +257,7 @@
         </div>
     </div>
 
-    <!-- Modal Checkout (Update texts) -->
+    <!-- Modal Checkout -->
     <div id="checkout-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[200] hidden items-center justify-center p-4">
         <div class="glass-card max-w-lg w-full p-10 rounded-[3rem] border-white/10 shadow-2xl text-left">
             <h2 class="text-2xl font-bold text-white mb-6">Attivazione Protocollo</h2>
@@ -366,6 +275,7 @@
                     <label for="tos-3" class="text-[10px] text-slate-400 leading-tight">Acconsento al trattamento dei dati per finalità di marketing e comunicazioni commerciali.</label>
                 </div>
             </div>
+
             <div id="payment-options" class="space-y-4 mb-8">
                 <div class="p-4 bg-slate-900/50 rounded-2xl border border-white/5">
                     <p class="text-[10px] text-slate-500 italic mb-3">Abbonamento Mensile (1,90€)</p>
@@ -510,37 +420,6 @@
             document.getElementById('checkout-modal').classList.add('hidden');
             document.getElementById('checkout-modal').classList.remove('flex');
         }
-        // Configurazione Stripe (Placeholder per chiavi API)
-        const STRIPE_PUBLISHABLE_KEY = 'pk_test_xxxxxxxxxxxxxxxxxxxxxxxx'; // Inserire chiave reale nei segreti del repo
-
-        async function processPayment() {
-            const tos1 = document.getElementById('tos-1').checked;
-            const tos2 = document.getElementById('tos-2').checked;
-            const tos3 = document.getElementById('tos-3').checked;
-
-            if (!tos1 || !tos2 || !tos3) {
-                alert("ERRORE LEGALE: È obbligatorio accettare i Termini, le Clausole 1341-1342 e il consenso Marketing per procedere.");
-                return;
-            }
-
-            console.log("Inizializzazione checkout transazionale...");
-
-            // Generazione Proof Hash legale (SHA256 simulato)
-            const timestamp = new Date().toISOString();
-            const rawData = `USER_ACCEPTANCE|${timestamp}|TOS_V1.0|ART1341_1342|MARKETING`;
-            const msgUint8 = new TextEncoder().encode(rawData);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-
-            console.log(`Legal Proof Hash: ${hashHex}`);
-
-            // Qui andrebbe l'integrazione con Stripe Checkout:
-            // stripe.redirectToCheckout({ lineItems: [{ price: 'price_id', quantity: 1 }], ... });
-
-            alert(`PROTOCOLLO ATTIVATO\n\nTransazione confermata.\nLegal Hash: ${hashHex.substring(0,16)}...\n\nReindirizzamento al download di Vigile Cieco...`);
-            closeCheckout();
-        }
 
         // Scanner Logic con Drag & Drop reale
         function startScanner() {
@@ -587,23 +466,25 @@
 
         // Gestione Drag & Drop
         const dropZone = document.getElementById('exposure-tool');
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.querySelector('.glass-card').style.borderColor = '#0ea5e9';
-        });
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.querySelector('.glass-card').style.borderColor = 'rgba(14, 165, 233, 0.2)';
-        });
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.querySelector('.glass-card').style.borderColor = 'rgba(14, 165, 233, 0.2)';
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                document.getElementById('start-scan-btn').classList.add('hidden');
-                document.getElementById('scanner-progress').classList.remove('hidden');
-                runScanSequence(files[0].name);
-            }
-        });
+        if (dropZone) {
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.querySelector('.glass-card').style.borderColor = '#0ea5e9';
+            });
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.querySelector('.glass-card').style.borderColor = 'rgba(14, 165, 233, 0.2)';
+            });
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.querySelector('.glass-card').style.borderColor = 'rgba(14, 165, 233, 0.2)';
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    document.getElementById('start-scan-btn').classList.add('hidden');
+                    document.getElementById('scanner-progress').classList.remove('hidden');
+                    runScanSequence(files[0].name);
+                }
+            });
+        }
     </script>
 </body>
 </html>
