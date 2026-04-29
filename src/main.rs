@@ -13,7 +13,11 @@ async fn main() {
 
     // Rilevamento lingua (semplificato per demo, usa EN di default)
     let lang = std::env::var("LANG").unwrap_or_else(|_| "en".to_string());
-    let lang_code = if lang.starts_with("it") { "it" } else if lang.starts_with("de") { "de" } else { "en" };
+    let lang_code = if lang.starts_with("it") { "it" }
+                   else if lang.starts_with("de") { "de" }
+                   else if lang.starts_with("fr") { "fr" }
+                   else if lang.starts_with("es") { "es" }
+                   else { "en" };
     let locales = Locales::load(lang_code);
 
     println!("{}", locales.started);
