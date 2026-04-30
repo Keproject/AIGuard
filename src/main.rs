@@ -105,6 +105,7 @@ async fn main() {
 }
 
 fn log_security_event(filename: &str, tag: &str) {
+    let _ = std::fs::create_dir_all("logs");
     if let Ok(mut file) = OpenOptions::new()
         .append(true)
         .create(true)

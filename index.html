@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://www.paypal.com/sdk/js?client-id=sb&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
     <title>AIGuard.io - Certifica il tuo Ingegno. Proteggi la tua Identità.</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -226,6 +227,7 @@
                             Attiva Blind-Shield Ora
                         </button>
                     </div>
+                    <p class="text-[10px] text-slate-500 mt-4">Risultati a scopo dimostrativo basati su pattern noti. La protezione totale richiede l'attivazione del protocollo Blind-Shield.</p>
                 </div>
             </div>
 
@@ -317,9 +319,12 @@
             </div>
             <span class="text-white font-bold text-sm tracking-tight">AIGuard.io</span>
         </div>
+        <div class="flex justify-center space-x-6 text-[10px] text-slate-500 mb-6 uppercase tracking-widest">
+            <a href="legal.html" class="hover:text-sky-400 transition">Note Legali & Privacy</a>
+        </div>
         <p class="text-slate-500 text-[10px] max-w-2xl mx-auto leading-relaxed">
             AIGuard.io è un software di monitoraggio e supporto alla protezione dati. KEPROJECT S.R.L. declina ogni responsabilità per danni eccedenti il limite di € 50,00 per singola licenza. <br>
-            &copy; 2024 KEPROJECT S.R.L. - P.IVA IT0123456789 - Foro di Pordenone.
+            &copy; 2024 KEPROJECT S.R.L. - P.IVA 01837360930 - Foro di Pordenone.
         </p>
     </footer>
 
@@ -335,8 +340,8 @@
                 <div class="bg-slate-800 p-3 rounded-2xl border border-white/5">Benvenuto nel Protocollo Blind-Shield. Come posso assisterti oggi?</div>
             </div>
             <div class="flex space-x-2">
-                <input type="text" id="chat-input" class="bg-slate-800 border border-white/10 rounded-xl p-3 flex-grow text-xs focus:outline-none focus:border-sky-500 transition" placeholder="Chiedi sull'EU AI Act...">
-                <button onclick="sendChat()" class="bg-sky-600 hover:bg-sky-500 p-3 rounded-xl transition">
+                <input type="text" id="chat-input" onkeypress="if(event.key === 'Enter') sendChat()" class="bg-slate-800 border border-white/10 rounded-xl p-3 flex-grow text-xs focus:outline-none focus:border-sky-500 transition" placeholder="Chiedi sull'EU AI Act...">
+                <button id="send-chat-btn" onclick="sendChat()" class="bg-sky-600 hover:bg-sky-500 p-3 rounded-xl transition">
                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
             </div>
@@ -350,27 +355,29 @@
             <div class="space-y-4 mb-8">
                 <div class="flex items-start space-x-3">
                     <input type="checkbox" id="tos-1" class="mt-1 accent-sky-500">
-                    <label for="tos-1" class="text-[10px] text-slate-400 leading-tight">Accetto i <a href="legal.html" target="_blank" class="text-sky-500 underline">Termini e Condizioni</a> e il Liability Cap di 50€.</label>
+                    <label for="tos-1" class="text-[10px] text-slate-400 leading-tight">Accetto i <a href="legal.html" target="_blank" class="text-sky-500 underline">Termini e Condizioni V1.0</a> (Art. 1, 3, 4 e 6).</label>
                 </div>
                 <div class="flex items-start space-x-3">
                     <input type="checkbox" id="tos-2" class="mt-1 accent-sky-500">
-                    <label for="tos-2" class="text-[10px] text-slate-400 leading-tight">Approvo specificamente le clausole vessatorie ex Art. 1341-1342 c.c. (Limitazione responsabilità e Manleva).</label>
+                    <label for="tos-2" class="text-[10px] text-slate-400 leading-tight">Approvo specificamente le clausole vessatorie ex Art. 1341-1342 c.c. (Art. 2: Liability Cap 50€, Art. 5: Manleva).</label>
                 </div>
                 <div class="flex items-start space-x-3">
                     <input type="checkbox" id="tos-3" class="mt-1 accent-sky-500">
-                    <label for="tos-3" class="text-[10px] text-slate-400 leading-tight">Acconsento al trattamento dei dati per finalità di marketing e comunicazioni commerciali.</label>
+                    <label for="tos-3" class="text-[10px] text-slate-400 leading-tight">Acconsento al trattamento dei dati per finalità di marketing (Art. 6 Privacy Policy).</label>
                 </div>
             </div>
-            <div class="bg-slate-900/50 p-4 rounded-2xl border border-white/5 mb-8">
-                <p class="text-[10px] text-slate-500 italic mb-2">Simulazione Transazione Sicura (Stripe)</p>
-                <div class="h-10 bg-slate-800 rounded-lg flex items-center px-4">
-                    <div class="w-8 h-4 bg-slate-700 rounded mr-4"></div>
-                    <div class="w-full h-2 bg-slate-700 rounded"></div>
+            <div id="payment-options" class="space-y-4 mb-8">
+                <div class="p-4 bg-slate-900/50 rounded-2xl border border-white/5">
+                    <p class="text-[10px] text-slate-500 italic mb-3">Abbonamento Mensile (1,90€)</p>
+                    <div id="paypal-button-container"></div>
+                </div>
+                <div class="p-4 bg-slate-900/50 rounded-2xl border border-white/5">
+                    <p class="text-[10px] text-slate-500 italic mb-3">Licenza Annuale (19€ - Risparmio 20%)</p>
+                    <a href="https://sumup.link/VigileCiecoAnnual" target="_blank" class="block w-full bg-[#3063E9] text-white font-bold py-3 rounded-xl text-center text-sm hover:opacity-90 transition">Paga con SumUp</a>
                 </div>
             </div>
             <div class="flex space-x-4">
-                <button onclick="closeCheckout()" class="flex-grow bg-slate-800 text-white font-bold py-4 rounded-2xl border border-slate-700">Annulla</button>
-                <button onclick="processPayment()" class="flex-grow bg-sky-600 hover:bg-sky-500 text-white font-bold py-4 rounded-2xl transition">Conferma Protocollo</button>
+                <button onclick="closeCheckout()" class="flex-grow bg-slate-800 text-white font-bold py-3 rounded-xl border border-slate-700 text-sm">Annulla</button>
             </div>
         </div>
     </div>
@@ -409,22 +416,95 @@
             input.value = '';
 
             setTimeout(() => {
-                let response = "Il Protocollo Blind-Shield opera a livello kernel-user per garantire che la tua identità rimanga privata.";
-                if (text.toLowerCase().includes("costo") || text.toLowerCase().includes("prezzo")) {
-                    response = "Il costo dell'offerta Early Bird è di soli €1,90 al mese.";
-                } else if (text.toLowerCase().includes("legale") || text.toLowerCase().includes("cap")) {
-                    response = "Operiamo con un Liability Cap di €50,00 e giurisdizione a Pordenone.";
-                } else if (text.toLowerCase().includes("rust")) {
-                    response = "L'uso di Rust ci permette di garantire una reattività sub-10ms, essenziale per la sicurezza deterministica.";
-                }
+                let response = getVigileCiecoResponse(text.toLowerCase());
                 chatMessages.innerHTML += `<div class="bg-slate-800 p-3 rounded-2xl border border-white/5 mr-8">${response}</div>`;
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }, 500);
         }
 
+        // Chat Knowledge Base (Vigile Cieco)
+        const chatKB = {
+            "latenza": "<10ms (grazie a Rust).",
+            "python": "No, troppo lento per il nostro protocollo.",
+            "mac": "Al momento Windows. Mac è in pipeline.",
+            "monitoraggio": "Tracciamo i flussi dati verso le IA in tempo reale.",
+            "installazione": "Un solo file .exe leggero e portatile.",
+            "firewall": "Non serve, operiamo a livello più profondo.",
+            "crash": "Sistema isolato, non influisce sulla stabilità di Windows.",
+            "icona rossa": "Indica un leak rilevato. Fermati e isola il file.",
+            "offline": "Funzioniamo al 100% in locale. Zero cloud.",
+            "update": "Aggiornamenti continui via GitHub repository.",
+            "leggete": "No, analizziamo solo i pattern, non leggiamo i tuoi segreti.",
+            "log": "Mai inviati al server. Restano nel tuo PC.",
+            "gdpr": "Piena conformità grazie al protocollo Local-First.",
+            "ciechi": "Sentiamo il rischio attraverso l'analisi entropica, ma non vediamo i tuoi dati.",
+            "cancella": "Sì, i log locali sono cancellabili con un click.",
+            "addestrate": "Assolutamente no. Vi proteggiamo proprio da questo.",
+            "policy": "Ti avvisiamo se cambiano le policy di ingestione delle IA note.",
+            "whitelist": "Sì, puoi configurare applicazioni fidate.",
+            "backdoor": "No, il codice è pulito e verificabile.",
+            "certificazione": "Blind-Shield prova che il tuo lavoro è umano e non generato.",
+            "smascherate": "Sì, rileviamo testi IA tramite analisi entropica.",
+            "prove": "Tracciamo la digitazione umana vs incolla massivo.",
+            "infallibile": "99% di efficacia sui modelli LLM attuali.",
+            "logo": "Puoi esporre il brand Blind-Shield se la licenza è attiva.",
+            "immagini": "Monitoriamo testo e codice sorgente per ora.",
+            "forensics": "Essenziale per proteggere il copyright e l'originalità del brand.",
+            "traduzioni": "Rileviamo se una traduzione è neurale o umana.",
+            "aziende": "Ideale per audit sull'uso delle IA da parte dei dipendenti.",
+            "pdf": "Generiamo report PDF firmati digitalmente.",
+            "prezzo": "1,90€/mese per i primi 5.000 utenti (Blitzscaling).",
+            "costo": "1,90€/mese. Il prezzo salirà dopo il lancio ufficiale.",
+            "abbonamento": "Sì, flessibile. Puoi disdire quando vuoi.",
+            "refund": "L'abbonamento annuale (19€) NON è rimborsabile.",
+            "bonifico": "No, solo PayPal o SumUp per attivazione istantanea.",
+            "sconti": "Sì, per licenze multiple oltre le 10 unità.",
+            "prova": "Puoi testare il widget Exposure qui sopra gratuitamente.",
+            "ottengo": "Protezione deterministica e modulo Forensics completo.",
+            "pc": "La licenza è legata al tuo account utente.",
+            "regalo": "Sì, puoi acquistare codici licenza per terzi.",
+            "chi siete": "Siamo KEPROJECT S.R.L., esperti in cybersecurity.",
+            "garanzia": "Offriamo monitoraggio preventivo deterministico.",
+            "responsabilità": "Limitata a 50€ per darti tecnologia d'élite a soli 1,90€.",
+            "dati": "La responsabilità dei dati resta sempre dell'utente.",
+            "tos": "Trasparenti, brevi e protettivi.",
+            "foro": "Il foro competente è Pordenone (PN).",
+            "assicurazione": "Coperta dalle riserve interne di KEPROJECT.",
+            "illegali": "Usi illegali vietati, pena la revoca della licenza.",
+            "bug": "Fix costanti in pipeline continua.",
+            "standard": "Seguiamo lo Standard Local-First 2026.",
+            "umani": "Offriamo supporto umano via ticket per casi complessi."
+        };
+
+        function getVigileCiecoResponse(query) {
+            for (let key in chatKB) {
+                if (query.includes(key)) return chatKB[key];
+            }
+            return "Sono il Vigile Cieco. Sono rapido, serio e protettivo. Chiedimi di latenza, privacy o del protocollo Blind-Shield.";
+        }
+
         function openCheckout(plan) {
             document.getElementById('checkout-modal').classList.remove('hidden');
             document.getElementById('checkout-modal').classList.add('flex');
+            initPayPal();
+        }
+
+        function initPayPal() {
+            if (document.getElementById('paypal-button-container').innerHTML !== "") return;
+
+            paypal.Buttons({
+                style: { shape: 'rect', color: 'blue', layout: 'vertical', label: 'subscribe' },
+                createSubscription: function(data, actions) {
+                    if (!document.getElementById('tos-1').checked || !document.getElementById('tos-2').checked || !document.getElementById('tos-3').checked) {
+                        alert("ERRORE LEGALE: Accetta tutti i termini prima di procedere.");
+                        return actions.reject();
+                    }
+                    return actions.subscription.create({ 'plan_id': 'P-VigileCiecoMonthly' });
+                },
+                onApprove: function(data, actions) {
+                    alert('Abbonamento attivato! ID: ' + data.subscriptionID);
+                }
+            }).render('#paypal-button-container');
         }
         function closeCheckout() {
             document.getElementById('checkout-modal').classList.add('hidden');
@@ -433,7 +513,7 @@
         // Configurazione Stripe (Placeholder per chiavi API)
         const STRIPE_PUBLISHABLE_KEY = 'pk_test_xxxxxxxxxxxxxxxxxxxxxxxx'; // Inserire chiave reale nei segreti del repo
 
-        function processPayment() {
+        async function processPayment() {
             const tos1 = document.getElementById('tos-1').checked;
             const tos2 = document.getElementById('tos-2').checked;
             const tos3 = document.getElementById('tos-3').checked;
@@ -444,28 +524,42 @@
             }
 
             console.log("Inizializzazione checkout transazionale...");
+
+            // Generazione Proof Hash legale (SHA256 simulato)
+            const timestamp = new Date().toISOString();
+            const rawData = `USER_ACCEPTANCE|${timestamp}|TOS_V1.0|ART1341_1342|MARKETING`;
+            const msgUint8 = new TextEncoder().encode(rawData);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+            console.log(`Legal Proof Hash: ${hashHex}`);
+
             // Qui andrebbe l'integrazione con Stripe Checkout:
             // stripe.redirectToCheckout({ lineItems: [{ price: 'price_id', quantity: 1 }], ... });
 
-            alert("PROTOCOLLO ATTIVATO: Transazione simulata con successo. Reindirizzamento al download di Vigile Cieco...");
+            alert(`PROTOCOLLO ATTIVATO\n\nTransazione confermata.\nLegal Hash: ${hashHex.substring(0,16)}...\n\nReindirizzamento al download di Vigile Cieco...`);
             closeCheckout();
         }
 
-        // Scanner Logic
+        // Scanner Logic con Drag & Drop reale
         function startScanner() {
             const btn = document.getElementById('start-scan-btn');
             const progress = document.getElementById('scanner-progress');
+            btn.classList.add('hidden');
+            progress.classList.remove('hidden');
+            runScanSequence();
+        }
+
+        function runScanSequence(fileName = "ambiente_locale") {
             const bar = document.getElementById('scan-bar');
             const percentage = document.getElementById('scan-percentage');
             const status = document.getElementById('scan-status');
             const log = document.getElementById('scan-log');
             const results = document.getElementById('scanner-results');
 
-            btn.classList.add('hidden');
-            progress.classList.remove('hidden');
-
             const steps = [
-                { p: 15, s: "Inizializzazione...", l: "Verifica integrità ambiente locale..." },
+                { p: 15, s: "Inizializzazione...", l: `Verifica integrità ${fileName}...` },
                 { p: 35, s: "Scansione Processi...", l: "Ricerca firme AI (Torch, Onnx, WebNN)..." },
                 { p: 65, s: "Analisi Flussi...", l: "Rilevamento tentativi di esfiltrazione dati..." },
                 { p: 85, s: "Verifica Forense...", l: "Analisi metadati documenti sensibili..." },
@@ -484,12 +578,32 @@
                 } else {
                     clearInterval(interval);
                     setTimeout(() => {
-                        progress.classList.add('hidden');
+                        document.getElementById('scanner-progress').classList.add('hidden');
                         results.classList.remove('hidden');
                     }, 500);
                 }
-            }, 800);
+            }, 600);
         }
+
+        // Gestione Drag & Drop
+        const dropZone = document.getElementById('exposure-tool');
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.querySelector('.glass-card').style.borderColor = '#0ea5e9';
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.querySelector('.glass-card').style.borderColor = 'rgba(14, 165, 233, 0.2)';
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.querySelector('.glass-card').style.borderColor = 'rgba(14, 165, 233, 0.2)';
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                document.getElementById('start-scan-btn').classList.add('hidden');
+                document.getElementById('scanner-progress').classList.remove('hidden');
+                runScanSequence(files[0].name);
+            }
+        });
     </script>
 </body>
 </html>
