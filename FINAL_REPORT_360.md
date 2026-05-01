@@ -14,8 +14,8 @@ AIGuard.io è una soluzione di sicurezza deterministica progettata per protegger
 - **i18n**: Supporto multilingua (IT, EN, DE, FR, ES) per notifiche e UI. [PASS]
 
 ### Landing Page & Web
-- **Human-First Protocol Design**: Estetica Cyber-Navy/Electric Blue professionale. [PASS]
-- **Interactive Tool**: "Check My AI Exposure" scanner simulato in JS. [PASS]
+- **Human-First Protocol Design**: Estetica Elite Cyber-Premium (Chameleon System). [PASS]
+- **Interactive Tool**: "Check My AI Exposure" scanner REALE (Entropia + Firme). [PASS]
 - **AEO (AI Engine Optimization)**: Schema.org e 10 FAQ semantiche integrate. [PASS]
 - **RAG Assistant**: Chatbot "AIGuard Assistant" per supporto legale/privacy. [PASS]
 - **Language Selector**: Supporto per 5 lingue europee. [PASS]
