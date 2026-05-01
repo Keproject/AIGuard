@@ -6,7 +6,7 @@
     <script src="https://www.paypal.com/sdk/js?client-id=sb&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
     <title>AIGuard.io - Certifica il tuo Ingegno. Proteggi la tua Identità.</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Source+Sans+3:wght@400;600;700&family=Atkinson+Hyperlegible:wght@400;700&family=Space+Grotesk:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Source+Sans+3:wght@400;600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Schema.org per AEO -->
     <script type="application/ld+json">
@@ -26,17 +26,16 @@
 
     <style>
         :root {
-            /* Tema Creator (Default) - Cyber Premium */
+            /* Tema Creator (Default) */
             --bg-color: #020617;
             --text-main: #cbd5e1;
             --text-heading: #ffffff;
-            --cta-color: #00F0FF;
-            --cta-hover: #00d1e0;
-            --accent-glow: rgba(0, 240, 255, 0.3);
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --font-family: 'Space Grotesk', sans-serif;
+            --cta-color: #FF6B35;
+            --cta-hover: #fa8255;
+            --accent-glow: rgba(255, 107, 53, 0.2);
+            --card-bg: rgba(30, 41, 59, 0.4);
+            --font-family: 'Inter', sans-serif;
             --body-size: 16px;
-            --card-border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .theme-manager {
@@ -49,7 +48,6 @@
             --card-bg: #ffffff;
             --font-family: 'Source Sans 3', sans-serif;
             --body-size: 18px;
-            --card-border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .theme-senior {
@@ -77,13 +75,11 @@
         .glass-card {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
-            border: var(--card-border);
-            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
         }
 
-        .theme-creator .glass-card {
-            box-shadow: 0 0 25px var(--accent-glow);
-        }
+        .theme-creator .glass-card { border-color: rgba(255, 255, 255, 0.1); }
         .theme-senior .glass-card { border: 2px solid #431407; backdrop-filter: none; }
 
         .cta-button {
@@ -101,47 +97,33 @@
         .theme-senior .grid { grid-template-columns: 1fr !important; }
         .theme-senior .container { max-width: 800px; }
 
-        /* Security Switch Styles (3D Component) */
+        /* Security Switch Styles */
         .toggle-switch {
-            width: 130px;
-            height: 70px;
-            background: #1e293b;
-            border-radius: 35px;
+            width: 120px;
+            height: 60px;
+            background: #334155;
+            border-radius: 30px;
             position: relative;
             cursor: pointer;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
-            padding: 5px;
+            transition: background 0.3s;
         }
-        .toggle-switch.active { background: #065f46; }
+        .toggle-switch.active { background: #15803D; }
         .toggle-knob {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(145deg, #ffffff, #e6e6e6);
+            width: 50px;
+            height: 50px;
+            background: white;
             border-radius: 50%;
             position: absolute;
-            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            top: 5px;
+            left: 5px;
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             display: flex;
-            align-items: center;
+            items-center: center;
             justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
         .active .toggle-knob { transform: translateX(60px); }
 
         #vulnerability-sim { transition: opacity 0.5s; }
-
-        /* Scanning Animation */
-        @keyframes scan {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(300%); }
-        }
-        .scanning-bar {
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, var(--cta-color), transparent);
-            animation: scan 2s linear infinite;
-            z-index: 10;
-        }
         .status-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
 
         /* Modal & Chat Styles */
@@ -230,7 +212,7 @@
 
     <!-- Exposure Tool V2 -->
     <section id="exposure-tool" class="container mx-auto px-6 py-24 text-center">
-        <div class="max-w-4xl mx-auto glass-card p-12 rounded-[3rem] relative overflow-hidden" id="scanner-box">
+        <div class="max-w-4xl mx-auto glass-card p-12 rounded-[3rem] relative overflow-hidden">
             <h2 class="text-3xl font-bold mb-4">Analisi Rischio Personalizzata</h2>
             <p id="exposure-desc" class="mb-10 max-w-xl mx-auto opacity-70">Scopri come l'IA sta utilizzando i tuoi dati senza il tuo consenso.</p>
 
@@ -423,13 +405,8 @@
             document.getElementById('start-scan-btn').classList.add('hidden');
             results.classList.remove('hidden');
             results.innerHTML = "<p class='animate-pulse'>Analisi locale in corso...</p>";
-            const scannerBox = document.getElementById('scanner-box');
-            const bar = document.createElement('div');
-            bar.className = 'scanning-bar';
-            scannerBox.appendChild(bar);
 
-            await new Promise(r => setTimeout(r, 2000));
-            bar.remove();
+            await new Promise(r => setTimeout(r, 1500));
 
             const risks = {
                 'creator': "Rilevato tentativo di scrap di asset grafici (.png, .svg).",
